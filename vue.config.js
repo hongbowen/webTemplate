@@ -7,6 +7,9 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
+// If your port is set to 80,
+// use administrator privileges to execute the command line.
+// For example, Mac: sudo npm run
 const port = 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
@@ -18,7 +21,7 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
+  publicPath: '/', // './'
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -34,7 +37,7 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:${port}/mock`,
+        target: `http://127.0.0.1:${port}/mock`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
@@ -51,30 +54,9 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    },
-    externals: {
-      vue: 'Vue',
-      'element-ui': 'ELEMENT'
     }
   },
   chainWebpack(config) {
-    const cdn = {
-      css: [
-        // element-ui css
-        'https://unpkg.com/element-ui/lib/theme-chalk/index.css'
-      ],
-      js: [
-        // vue must at first!
-        'https://unpkg.com/vue/dist/vue.js',
-        // element-ui js
-        'https://unpkg.com/element-ui/lib/index.js'
-      ]
-    }
-    config.plugin('html')
-      .tap(args => {
-        args[0].cdn = cdn
-        return args
-      })
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
